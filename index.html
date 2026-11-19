@@ -42,12 +42,64 @@
   #result h2 { margin: 0 0 8px; font-size: 1.6rem; color: var(--cross); }
   #result .top { font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; }
   #result button { font-size: 1rem; font-family: inherit; padding: 12px 28px; margin-top: 10px; border: 0; border-radius: 10px; background: var(--teal); color: #fff; cursor: pointer; }
+  #scene { margin: 6px 0 4px; border-radius: 16px; overflow: hidden; border: 2px solid #bfe3dc; box-shadow: 0 2px 8px rgba(31,157,143,.18); line-height: 0; }
+  #scene svg { width: 100%; height: auto; display: block; }
+  #patient { transform-box: fill-box; transform-origin: 50% 100%; }
+  #patient > rect:first-child { fill: var(--gown, #bfe3ff); }
+  .p-breath { animation: breath 3s ease-in-out infinite; }
+  @keyframes breath { 0%,100% { transform: scale(1); } 50% { transform: scale(1.025, 1.04); } }
+  #patient.hit { animation: hitp .35s; }
+  @keyframes hitp { 0% { transform: scale(1); } 30% { transform: scale(.96, 1.06) rotate(-1.5deg); } 100% { transform: scale(1); } }
+  #patient.enter { animation: enterp .9s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes enterp { 0% { transform: translateX(140%) scale(.8); opacity: 0; } 100% { transform: none; opacity: 1; } }
+  #patient .eye-open, #patient .eye-ouch, #patient .m-ouch, #patient .m-smile, #patient .zzz, #patient .sweat { display: none; }
+  #patient[data-mood="sleep"] .eye-sleep, #patient[data-mood="sleep"] .m-sleep { display: inline; }
+  #patient[data-mood="ouch"] .eye-sleep, #patient[data-mood="ouch"] .m-sleep, #patient[data-mood="smile"] .eye-sleep, #patient[data-mood="smile"] .m-sleep { display: none; }
+  #patient[data-mood="ouch"] .eye-ouch, #patient[data-mood="ouch"] .m-ouch { display: inline; }
+  #patient[data-mood="smile"] .eye-open, #patient[data-mood="smile"] .m-smile { display: inline; }
+  #patient[data-mood="sleep"] .zzz { display: inline; animation: zz 2.4s ease-in-out infinite; }
+  #patient[data-hp="low"] #bandage { display: none; }
+  #patient[data-hp="high"] .sweat, #patient[data-hp="mid"] .sweat { display: inline; animation: sw 1.6s infinite; }
+  @keyframes zz { 0%,100% { opacity: .3; transform: translateY(4px); } 50% { opacity: 1; transform: translateY(-4px); } }
+  @keyframes sw { 0%,100% { transform: translateY(0); opacity: .9; } 100% { transform: translateY(10px); opacity: 0; } }
+  .ecg-move { animation: ecg 1.6s linear infinite; }
+  @keyframes ecg { from { transform: translateX(0); } to { transform: translateX(-88px); } }
+  .heart { animation: beat .8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.5); } 30% { transform: scale(1); } }
+  .blip { animation: blip 1.6s steps(1) infinite; }
+  @keyframes blip { 50% { opacity: .2; } }
+  .cross-sign { animation: crossp 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes crossp { 0%,100% { transform: translate(190px,22px) scale(1); } 50% { transform: translate(190px,22px) scale(1.08); } }
+  .cloud { animation: cloud 14s linear infinite alternate; }
+  @keyframes cloud { from { transform: translateX(0); } to { transform: translateX(34px); } }
+  .drop { animation: dr 1.3s linear infinite; }
+  @keyframes dr { from { transform: translateY(0); opacity: 1; } to { transform: translateY(46px); opacity: 0; } }
+  .doc-body { animation: idle 2.2s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  #docRival .doc-body { animation-delay: -1.1s; }
+  @keyframes idle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  .doc.act .arm { animation: stab .45s; transform-box: fill-box; transform-origin: 20% 80%; }
+  @keyframes stab { 0% { transform: rotate(0); } 40% { transform: rotate(-25deg) translateX(8px); } 100% { transform: rotate(0); } }
+  #docRival .tool { transform: scaleX(1); }
+  .spark { animation: spark .6s ease-out forwards; }
+  @keyframes spark { to { transform: translateX(-24px) scale(.2); opacity: 0; } }
+  .fx-syringe { animation: inject .8s ease-out forwards; }
+  @keyframes inject { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
+  .dropfx { animation: dfx .8s ease-in forwards; opacity: 0; }
+  @keyframes dfx { 0% { opacity: 1; margin-top: 0; } 100% { opacity: 0; } }
+  .ring { animation: ringx .8s ease-out forwards; transform-box: fill-box; transform-origin: center; opacity: 0; }
+  @keyframes ringx { 0% { opacity: 1; transform: scale(.4); } 100% { opacity: 0; transform: scale(1.6); } }
+  .flynum { animation: fly 1.1s ease-out forwards; }
+  @keyframes fly { 0% { opacity: 0; transform: translateY(10px) scale(.6); } 20% { opacity: 1; transform: translateY(-6px) scale(1.3); } 100% { opacity: 0; transform: translateY(-60px) scale(1); } }
+  .burst { animation: bst 1.4s ease-out forwards; opacity: 0; }
+  @keyframes bst { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px); } }
+  @media (prefers-reduced-motion: reduce) { .p-breath, .ecg-move, .doc-body, .cloud, .cross-sign { animation: none; } }
   .small { font-size: .75rem; color: #6d8a8f; line-height: 1.6; }
   @media (max-width: 360px) { .num { font-size: 1.35rem; } #fx { font-size: 2.2rem; } }
 </style>
 </head>
 <body>
 <header><span class="cross"></span><h1>インフレ病院</h1></header>
+<div id="scene"></div>
 <div class="panel" id="hp"><div class="label">患者 <span id="patientNo">1</span> 人目の HP（最大 <span id="hpMax">1</span>）</div><div class="num" id="hpNum">0</div></div>
 <div class="panel" id="mine"><div class="label">自分の数字（治療 <span id="treatCount">0</span> 回）</div><div class="num" id="mineNum">0</div></div>
 <div class="panel" id="rival"><div class="label" id="rivalLabel">相手（ダミー）の1回のダメージ ／ 2人分の合計</div><div class="num" id="rivalNum">0</div><div class="num" id="totalNum" style="color:#2a9">0</div></div>
@@ -76,6 +128,7 @@
 <script src="coop.js"></script>
 <script src="net.js"></script>
 <script src="result.js"></script>
+<script src="scene.js"></script>
 <script>
 (function () {
   var B = BigNum;
@@ -96,7 +149,16 @@
   var conn = null, dummyTimer = null;
   var TAPS_PER_OFFER = 5;
   function $(id) { return document.getElementById(id); }
+  function ratio(p) { // 患者の残り HP の割合（0〜1。見た目用）
+    if (p.hp.m === 0) return 0;
+    var d = p.hp.e - p.max.e;
+    if (d < -15) return 0;
+    return Math.min(1, p.hp.m * Math.pow(10, d) / p.max.m);
+  }
+  function fxText(dmg) { return '-' + B.format(dmg); }
+  Scene.mount($('scene'));
   function render() {
+    Scene.setHp(ratio(state.patient));
     $('hpNum').textContent = B.format(state.patient.hp);
     $('hpMax').textContent = B.format(state.patient.max);
     $('patientNo').textContent = state.patient.n + 1;
@@ -138,6 +200,7 @@
     state.tapsToNext = TAPS_PER_OFFER;
     $('rx').style.display = 'none';
     effect(p.fx);
+    Scene.treat('me', p.fx);
     render();
   }
   // 治療：自分と相手の攻撃力が合わさって患者に入る
@@ -153,19 +216,22 @@
   function strike(dmg) {
     if (state.finished) return;
     var r = Patient.hit(state.patient, dmg);
+    Scene.treat(arguments[1] || 'me', fxText(dmg));
     state.patient = r.patient;
     if (r.defeated) {
       state.patient = Patient.next(state.patient);
       state.partner.onDefeat();
+      Scene.cured();
       state.defeated++;
       if (state.defeated >= Result.ROUND_PATIENTS) { effect('全員治療！'); finish(); return; }
       effect('次の患者！');
+      Scene.newPatient(state.patient.n);
     }
   }
   function partnerTreat() { // ダミーの相手が自動で治療する
     if (state.online || state.finished) return;
     state.rival = B.add(state.rival, state.partner.perTap); // ダミーの貢献度
-    strike(Coop.combine(B.from(0), state.partner.perTap));
+    strike(Coop.combine(B.from(0), state.partner.perTap), 'rival');
     render();
   }
   function treat() {
@@ -188,7 +254,7 @@
     var fresh = m.treats > state.partnerTreats; // 治療が増えたときだけ患者に当てる（接続・やり直しの通知では当てない）
     state.partnerTreats = m.treats;
     state.rival = { m: m.mine.m, e: m.mine.e };
-    if (fresh) strike(state.partner.perTap);
+    if (fresh) strike(state.partner.perTap, 'rival');
     render();
   }
   function attach(c) {
@@ -237,6 +303,7 @@
     if (!state.online) state.partner = Coop.dummyPartner();
     $('result').style.display = 'none';
     if (conn && conn.open) conn.send(Net.makeTreat(0, state.perTap, state.mine)); // 相手にも最初からやり直しを伝える
+    Scene.newPatient(0);
     showOffer(); render();
   });
   $('treat').addEventListener('click', treat);
