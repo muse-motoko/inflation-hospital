@@ -3,7 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>インフレ病院</title>
+<title>インフレ病院｜数字が億まで膨らむ、2人協力の治療ゲーム</title>
+<meta name="description" content="治療ボタンを押すたび数字が 10→100→億 と膨らむ！ 患者3人を倒せば勝ち。合言葉で友だちとオンライン2人対戦もできる、ブラウザだけの無料ゲーム。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="インフレ病院">
+<meta property="og:title" content="インフレ病院｜数字が億まで膨らむ、2人協力の治療ゲーム">
+<meta property="og:description" content="治療ボタンを押すたび数字が 10→100→億 と膨らむ！ 患者3人を倒せば勝ち。合言葉で友だちとオンライン2人対戦もできる、ブラウザだけの無料ゲーム。">
+<meta property="og:url" content="https://muse-motoko.github.io/inflation-hospital/">
+<meta property="og:image" content="https://muse-motoko.github.io/inflation-hospital/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="インフレ病院｜数字が億まで膨らむ、2人協力の治療ゲーム">
+<meta name="twitter:description" content="治療ボタンを押すたび数字が 10→100→億 と膨らむ！ 患者3人を倒せば勝ち。友だちとオンライン2人対戦もできる無料ゲーム。">
+<meta name="twitter:image" content="https://muse-motoko.github.io/inflation-hospital/ogp.png">
 <style>
   :root { --teal: #1f9d8f; --teal-d: #157a6f; --mint: #e8f6f3; --cross: #e5484d; --ink: #1d3b43; --sub: #5b7a80; }
   * { box-sizing: border-box; }
@@ -93,25 +106,49 @@
   .burst { animation: bst 1.4s ease-out forwards; opacity: 0; }
   @keyframes bst { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px); } }
   @media (prefers-reduced-motion: reduce) { .p-breath, .ecg-move, .doc-body, .cloud, .cross-sign { animation: none; } }
+  #hero { margin: 4px 0 8px; padding: 14px 12px; border-radius: 16px; background: linear-gradient(135deg, #1f9d8f, #157a6f); color: #fff; box-shadow: 0 3px 10px rgba(21,122,111,.3); }
+  #hero .catch { font-size: 1.55rem; font-weight: 900; line-height: 1.35; margin: 0; }
+  #hero .catch em { font-style: normal; color: #ffe27a; font-size: 1.15em; }
+  #hero .goal { margin: 8px 0 0; font-size: 1.05rem; font-weight: bold; background: rgba(255,255,255,.18); border-radius: 10px; padding: 6px 8px; }
+  #hero .goal b { color: #ffe27a; }
+  #online { border: 3px solid #e5484d; background: #fff7f5; position: relative; margin-top: 16px; }
+  #online .badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: #e5484d; color: #fff; font-size: .8rem; font-weight: bold; padding: 3px 12px; border-radius: 12px; white-space: nowrap; }
+  #online .vs-title { font-size: 1.25rem; font-weight: 900; color: var(--cross); margin: 6px 0 2px; }
+  #online .vs-desc { font-size: .85rem; color: var(--ink); margin-bottom: 8px; }
+  #online .row { display: flex; gap: 6px; justify-content: center; margin: 6px 0; }
+  #online .row input { flex: 1; width: auto; min-width: 0; }
+  #online button.sub { background: #fff; color: var(--teal-d); border: 2px solid var(--teal); font-weight: bold; }
+  #online button.sub:disabled { color: #9bc9c3; border-color: #bfe3dc; background: #fff; }
+  #online #connect { background: var(--cross); font-weight: bold; }
+  #online #connect:disabled { background: #e9a0a3; }
+  #share { margin: 10px 0; }
+  #share button { font-size: .95rem; font-family: inherit; font-weight: bold; padding: 10px 18px; border: 2px solid var(--teal); border-radius: 10px; background: #fff; color: var(--teal-d); cursor: pointer; }
   .small { font-size: .75rem; color: #6d8a8f; line-height: 1.6; }
   @media (max-width: 360px) { .num { font-size: 1.35rem; } #fx { font-size: 2.2rem; } }
 </style>
 </head>
 <body>
 <header><span class="cross"></span><h1>インフレ病院</h1></header>
+<section id="hero">
+  <p class="catch">押すたび数字が <em>10→100→億</em> へ<br>爆発的に膨らむ！</p>
+  <p class="goal">🎯 目標：<b>患者を3人</b>倒せ！ 友だちと<b>2人対戦</b>もできる</p>
+</section>
+<div id="share"><button id="copyUrl" type="button">🔗 このゲームのURLをコピー</button></div>
 <div id="scene"></div>
+<div class="panel" id="online">
+  <span class="badge">★ 一番の見どころ ★</span>
+  <div class="vs-title">⚔ 友だちと2人対戦！</div>
+  <div class="vs-desc">2人で同じ合言葉を入れて「対戦する」。治した量（貢献度）で勝負！<br>（一人なら下のダミーの相手と遊べます）</div>
+  <div class="row"><input id="code" placeholder="合言葉（例：ひみつ123）" maxlength="24"><button id="connect">対戦する</button></div>
+  <div class="row"><button id="copyCode" class="sub" type="button">📋 合言葉をコピー</button></div>
+  <div class="small" id="netStatus">未接続（ダミーの相手と治療中）</div>
+  <div class="small">※「対戦する」を押すと、PeerJS Cloud（外部の接続仲介サーバー）と通信します。</div>
+</div>
 <div class="panel" id="hp"><div class="label">患者 <span id="patientNo">1</span> 人目の HP（最大 <span id="hpMax">1</span>）</div><div class="num" id="hpNum">0</div></div>
 <div class="panel" id="mine"><div class="label">自分の数字（治療 <span id="treatCount">0</span> 回）</div><div class="num" id="mineNum">0</div></div>
 <div class="panel" id="rival"><div class="label" id="rivalLabel">相手（ダミー）の1回のダメージ ／ 2人分の合計</div><div class="num" id="rivalNum">0</div><div class="num" id="totalNum" style="color:#2a9">0</div></div>
 <div class="panel" id="perTap"><div class="label">1回の治療のダメージ（処方 <span id="rxCount">0</span> 個）</div><div class="num" id="perTapNum">1</div></div>
 <div class="panel" id="rx"><div class="label">処方を選んでください</div><div id="rxList"></div></div>
-<div class="panel" id="online">
-  <div class="label">オンライン対戦（合言葉を2人で同じにしてください）</div>
-  <input id="code" placeholder="合言葉" maxlength="24">
-  <button id="connect">接続</button>
-  <div class="small" id="netStatus">未接続（ダミーの相手と治療中）</div>
-  <div class="small">※「接続」を押すと、PeerJS Cloud（外部の接続仲介サーバー）と通信します。</div>
-</div>
 <div id="fx"></div>
 <div id="result"><div class="box">
   <h2 id="resTitle"></h2>
@@ -139,7 +176,7 @@
     rival: B.from(0),         // 相手の数字（ステップ1では0のまま。通信は後のステップ）
     perTap: B.from(1),        // 1回の治療で増える量（処方で増える）
     taken: [],                // 取得した処方
-    tapsToNext: 0,            // 次の処方提示までの治療回数
+    tapsToNext: 5,            // 次の処方提示までの治療回数（開いた直後は出さず、5回治療してから）
     treats: 0,                // 自分の治療回数
     online: false,            // 相手と接続中か
     partnerTreats: 0,         // 相手の治療回数
@@ -147,7 +184,8 @@
     finished: false           // ラウンド終了（結果画面）
   };
   var conn = null, dummyTimer = null;
-  var TAPS_PER_OFFER = 5;
+  var TAPS_PER_OFFER = 5; // 調整用：何回治療するごとに処方を出すか
+  var SHARE_URL = 'https://muse-motoko.github.io/inflation-hospital/'; // 調整用：コピーされるURL
   function $(id) { return document.getElementById(id); }
   function ratio(p) { // 患者の残り HP の割合（0〜1。見た目用）
     if (p.hp.m === 0) return 0;
@@ -295,19 +333,37 @@
       } else { status('接続できませんでした'); $('connect').disabled = false; }
     });
   }
+  function copyText(text, btn, done) { // クリップボードへコピー（端末内だけで完結。外部送信なし）
+    var orig = btn.textContent;
+    function ok() { btn.textContent = done; setTimeout(function () { btn.textContent = orig; }, 1600); }
+    function fallback() {
+      var t = document.createElement('textarea');
+      t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy') ? ok() : (btn.textContent = 'コピーできませんでした'); } catch (e) { btn.textContent = 'コピーできませんでした'; }
+      document.body.removeChild(t);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+  }
+  $('copyUrl').addEventListener('click', function () { copyText(SHARE_URL, this, '✅ コピーしました！'); });
+  $('copyCode').addEventListener('click', function () {
+    var v = $('code').value.trim();
+    if (!v) { status('先に合言葉を入力してください'); $('code').focus(); return; }
+    copyText(v, this, '✅ コピーしました！');
+  });
   $('connect').addEventListener('click', connect);
   $('again').addEventListener('click', function () {
     state.patient = Patient.create(0); state.mine = B.from(0); state.rival = B.from(0);
-    state.perTap = B.from(1); state.taken = []; state.tapsToNext = 0; state.treats = 0;
+    state.perTap = B.from(1); state.taken = []; state.tapsToNext = TAPS_PER_OFFER; state.treats = 0;
     state.partnerTreats = 0; state.defeated = 0; state.finished = false;
     if (!state.online) state.partner = Coop.dummyPartner();
     $('result').style.display = 'none';
     if (conn && conn.open) conn.send(Net.makeTreat(0, state.perTap, state.mine)); // 相手にも最初からやり直しを伝える
     Scene.newPatient(0);
-    showOffer(); render();
+    $('rx').style.display = 'none'; render();
   });
   $('treat').addEventListener('click', treat);
-  showOffer();
+  $('rx').style.display = 'none'; // 開いた直後は処方を出さない（治療5回ごとに出る）
   render();
   setInterval(partnerTreat, 3000);
   window.hospital = { state: state, render: render, treat: treat, choose: choose }; // 動作確認用
